@@ -54,14 +54,14 @@ matrix:
         apt:
           sources: *all_sources
           packages: ['g++-7', 'clang-7', 'libstdc++-6-dev', 'llvm-7-dev', 'libclang-7-dev', 'zlib1g-dev', 'lcov']
-          coverity_scan:
-            project:
-              name: "andreasfertig/cppinsights"
-              description: "C++ Insights"
+        coverity_scan:
+          project:
+            name: "andreasfertig/cppinsights"
+            description: "C++ Insights"
           notification_email: "andy@cppinsights.io"
           build_command_prepend: "cmake -DINSIGHTS_LLVM_CONFIG=${LLVM_CONFIG} -DINSIGHTS_COVERAGE=${COVERAGE}  .."
           build_command: "make"
-          branch_pattern: coverity_scan
+          branch_pattern: "coverity_scan"
     env: COMPILER='g++-7' COMPILER_CC='gcc-7' LLVM_CONFIG='/usr/bin/llvm-config-7' COVERAGE='No'
 
       
