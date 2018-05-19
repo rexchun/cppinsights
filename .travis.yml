@@ -9,6 +9,8 @@ env:
    global:
    - secure: "o69Y/rLqNHK8dzh4FQmiFoEZOF4vwqb8HcUQcl7kVKLh9mfaFtRPbrolvcRDZ7kHgUYfHi2lhNDuiQWXXQTyjPYgxm9DEWnxP8VAxQ5FIY/aqtCTSFNOzwLX6YO+698SblafMKZVSDgimZy3lvQAqcI+ZMaPvr9wDFsQDKWr6btkq/IX8JTQeBZDPDHiU0/hMACGXjn+jqGULxU9ROyKAlLx4Sd7fo9wMdb/3fA6Bwd9MkZZpo5Eqpkur2RsaYi7QCFx2fhAXZbn6it9o0pF28hs7AL87BlYDzHwlcso+/8ifiCnHaqCtlzeMSfw4hwdtU7lHdbNc6MeCpqN4YknP3PYyUbgVirRdYEs2b3WUjLg+Ks9y3DX+fKkNq58hYCC25xvDsrrquXdFcCaaLHbsYnBgloekMYls2UCUB4dDt1w13/AvobXpa8o2ADa44LmQQoUW0d6PGTnS+n6X1Cvs/T3QpRIyjHPBiL8bZbDACo3OvstKN7DP9gAmPiSHdQV1jg/jxzzPK0sYd4Y92DKc5jSe7pmAh+WK9FeCqAjt6HCGZaNrTmA6oePMRF9g8w2t9kpiFZOV3SIpAQ+EwZWYx6Jsa6fZPRxYCQdO/gCGJ5s3YlsX2J9QfrOJ+2OqKEjgwm2Hmn+O5hXrMPuOVaXDn4beSiSkB/q0X0LtUpOg2g="
    - COVERITY_SCAN_BRANCH_PATTERN="coverity_scan"
+   - COVERITY_SCAN_NOTIFICATION_EMAIL="andy@cppinsights.io."
+   - COVERITY_SCAN_PROJECT_NAME="andreasfertig/cppinsights"
    - COVERITY_SCAN_BUILD_COMMAND="make"
       
 
@@ -43,7 +45,7 @@ matrix:
     # 3/ Linux Clang Coverage Builds
     - os: linux
       compiler: gcc
-      addons: &gcc8
+      addons:
         apt:
           sources: *all_sources
           packages: ['g++-7', 'clang-7', 'libstdc++-6-dev', 'llvm-7-dev', 'libclang-7-dev', 'zlib1g-dev', 'lcov']
@@ -52,7 +54,7 @@ matrix:
     # 4/ Coverity Builds
     - os: linux
       compiler: gcc
-      addons: &gcc8
+      addons:
         apt:
           sources: *all_sources
           packages: ['g++-7', 'clang-7', 'libstdc++-6-dev', 'llvm-7-dev', 'libclang-7-dev', 'zlib1g-dev', 'lcov']
