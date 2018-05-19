@@ -1,6 +1,6 @@
 #! /bin/bash
 
-if [[ "${COVERAGE}" == "Yes" ]]; then
+if [[ "${COVERAGE}" == "Yes" ]] && [[ "${COVERITY_SCAN_BRANCH}" != "1" ]]; then
     # Creating report
     cd ${TRAVIS_BUILD_DIR}/build
 
