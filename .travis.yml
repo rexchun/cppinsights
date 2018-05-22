@@ -72,7 +72,10 @@ before_script:
   - cd build
   - cmake -DINSIGHTS_LLVM_CONFIG=${LLVM_CONFIG} -DINSIGHTS_COVERAGE=${COVERAGE} -DINSIGHTS_STATIC=${STATIC}  ..
 script:
-  - make -j 2
+  - |
+    if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then
+       make -j 2
+    fi
   - ${TRAVIS_BUILD_DIR}/scripts/travis_tests.sh
 
 after_success:
