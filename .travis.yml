@@ -84,12 +84,24 @@ matrix:
 
 before_install:
   - |
-    if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then
+    if [ "${COVERITY_SCAN_BRANCH}" == 1 ]; then
         echo -n | openssl s_client -connect 'scan.coverity.com:443' | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
     fi
     
 install:
-  - ${TRAVIS_BUILD_DIR}/scripts/travis_install.sh
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "osx" ]]; then
+      brew install cmake || brew upgrade cmake
+      brew install xz || brew upgrade xz
+
+      mkdir ${TRAVIS_BUILD_DIR}/clang
+      cd ${TRAVIS_BUILD_DIR}/clang
+      wget https://releases.llvm.org/6.0.0/clang+llvm-6.0.0-x86_64-apple-darwin.tar.xz
+
+      xz -vd clang+llvm-6.0.0-x86_64-apple-darwin.tar.xz
+      tar -xf clang+llvm-6.0.0-x86_64-apple-darwin.tar
+      mv clang+llvm-6.0.0-x86_64-apple-darwin current
+    fi    
     
 before_script:
   - |
@@ -102,6 +114,7 @@ before_script:
   - mkdir build
   - cd build
   - cmake -DINSIGHTS_LLVM_CONFIG=${LLVM_CONFIG} -DINSIGHTS_COVERAGE=${COVERAGE} -DINSIGHTS_STATIC=${STATIC}  ..
+
 script:
   - |
     if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then
@@ -118,7 +131,7 @@ before_deploy:
 - ssh-add /tmp/deploy_rsa
 - tar -cjf $TRAVIS_BUILD_DIR/build/include.tar.bz2 /usr/include
 - tar -cjf $TRAVIS_BUILD_DIR/build/include-clang.tar.bz2 /usr/lib/llvm-7/lib/clang/7.0.0/include
-  
+
 deploy:
   provider: script
   skip_cleanup: true
