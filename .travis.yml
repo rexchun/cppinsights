@@ -57,36 +57,6 @@ matrix:
         - zlib1g-dev
         - lcov
     env: COMPILER='g++-7' COMPILER_CC='gcc-7' LLVM_CONFIG='/usr/bin/llvm-config-7' STATIC='No' COVERAGE='Yes'
-    
-    # 4/ Coverity Builds
-    - os: linux
-      compiler: gcc
-    addons:
-        apt:
-          sources: *all_sources
-        packages:
-        - g++-7
-        - clang-7
-        - libstdc++-6-dev
-        - llvm-7-dev
-        - libclang-7-dev
-        - zlib1g-dev
-        - lcov
-      coverity_scan:
-        project:
-          name: "andreasfertig/cppinsights"
-          version: "1.0"
-          description: "C++ Insights"
-        notification_email: "andy@cppinsights.io"
-        build_command_prepend: cmake -DINSIGHTS_LLVM_CONFIG=${LLVM_CONFIG} -DINSIGHTS_COVERAGE=${COVERAGE}  ..
-        build_command: make
-        branch_pattern: coverity_scan
-    env: COMPILER='g++-7' COMPILER_CC='gcc-7' LLVM_CONFIG='/usr/bin/llvm-config-7' COVERAGE='No'
-
-      
-before_install:
-  - echo -n | openssl s_client -connect 'scan.coverity.com:443' | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
-
 install:
   - ${TRAVIS_BUILD_DIR}/scripts/travis_install.sh
     
@@ -102,7 +72,7 @@ before_script:
   - cd build
   - cmake -DINSIGHTS_LLVM_CONFIG=${LLVM_CONFIG} -DINSIGHTS_COVERAGE=${COVERAGE} -DINSIGHTS_STATIC=${STATIC}  ..
 script:
-  - if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then make -j 2; fi
+  - make -j 2
   - ${TRAVIS_BUILD_DIR}/scripts/travis_tests.sh
 
 after_success:
@@ -125,5 +95,4 @@ deploy:
 env:
   global:
     secure: MI6S+9up0JKkDxrW7b248Ro7auyyVogdwSj/UsTLNTKMBwNOaK4HccDNif6K2qAJmTlGt1xFHh0cHXvTkACcUc8hvZghJVGUOOCaWK9YvwR8wwQgoFi034BjG/Tg7Uj6WX6G65mv0UVv/2dxZRghDTujCnFiZOoSpApBvqFjQ/gamP7P+vjJiWQVJWJTOhYHz/oK6jQHMMlNeRJbzZhp/kgo7LPtdGZVT95+S6Xn3rHIuj5pJdgwYf/NFckWI9rkkkqn47XqYozGf5HHnBlcZEDCdGEQzI8HDngRC5mjejEMCKd2mBJP319xO8UDesplpabzZhAqucskKynVK9lqFlHtdYn7dvSLXHUF9oPAWoMckxDmNIBqarEy5kYZG+ccRm4xmP2V7JAfGpW7HAtLycXEHs5Fxf839IfyTHMIp6fF+a/t2M6SE/m4rZ3Ser7Y09EAeGqUKgvc/YQwkSSdrRxE1bMIfHES6/IRdSMGkAOa1U74ulqN3FzdfKX2Ng93EZ15zXiHqipljmlPDiC8BFXG3VEbFMubKBuvB8c5KjlpwuU5Udk9cehGWDLDcKi0K7PZpZ1p2l1aU17y8QxFEcOUw6Q/nYbZ9gEf7eF5DrpycSyv6xpGyYq59LrL5m5/XUAQ9ZLN+92rQlMXZqRncMll2ZJX5Tzb+PeO8P1y7mA=
-    secure: "o69Y/rLqNHK8dzh4FQmiFoEZOF4vwqb8HcUQcl7kVKLh9mfaFtRPbrolvcRDZ7kHgUYfHi2lhNDuiQWXXQTyjPYgxm9DEWnxP8VAxQ5FIY/aqtCTSFNOzwLX6YO+698SblafMKZVSDgimZy3lvQAqcI+ZMaPvr9wDFsQDKWr6btkq/IX8JTQeBZDPDHiU0/hMACGXjn+jqGULxU9ROyKAlLx4Sd7fo9wMdb/3fA6Bwd9MkZZpo5Eqpkur2RsaYi7QCFx2fhAXZbn6it9o0pF28hs7AL87BlYDzHwlcso+/8ifiCnHaqCtlzeMSfw4hwdtU7lHdbNc6MeCpqN4YknP3PYyUbgVirRdYEs2b3WUjLg+Ks9y3DX+fKkNq58hYCC25xvDsrrquXdFcCaaLHbsYnBgloekMYls2UCUB4dDt1w13/AvobXpa8o2ADa44LmQQoUW0d6PGTnS+n6X1Cvs/T3QpRIyjHPBiL8bZbDACo3OvstKN7DP9gAmPiSHdQV1jg/jxzzPK0sYd4Y92DKc5jSe7pmAh+WK9FeCqAjt6HCGZaNrTmA6oePMRF9g8w2t9kpiFZOV3SIpAQ+EwZWYx6Jsa6fZPRxYCQdO/gCGJ5s3YlsX2J9QfrOJ+2OqKEjgwm2Hmn+O5hXrMPuOVaXDn4beSiSkB/q0X0LtUpOg2g="
 
