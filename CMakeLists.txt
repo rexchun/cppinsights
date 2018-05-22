@@ -5,6 +5,7 @@ option(INSIGHTS_TIDY     "Run clang-tidy"            OFF)
 option(INSIGHTS_STATIC   "Use static linking"        OFF)
 option(INSIGHTS_COVERAGE "Enable code coverage"      OFF)
 option(DEBUG             "Enable debug"              OFF)
+option(INSIGHTS_NO_LINKING "Compile only, dont't link (used for coverity scan"              OFF)
 
 set(INSIGHTS_LLVM_CONFIG "llvm-config" CACHE STRING "LLVM config executable to use")
 
@@ -293,6 +294,16 @@ target_link_libraries(insights
   clangASTMatchers
   ${ADDITIONAL_LIBS}
 )
+
+if(INSIGHTS_NO_LINKING)
+    set(INSIGHTS_STRIP Off)
+
+    if(APPLE)
+        set(CMAKE_CXX_LINK_EXECUTABLE /usr/bin/true )
+    else()
+        set(CMAKE_CXX_LINK_EXECUTABLE /bin/true )
+    endif()
+endif()
 
 if(CLANG_TIDY_EXE AND INSIGHTS_TIDY)
   set_target_properties(insights PROPERTIES CXX_CLANG_TIDY "${DO_CLANG_TIDY}")
