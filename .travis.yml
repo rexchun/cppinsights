@@ -120,10 +120,23 @@ script:
     if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then
        make -j 2
     fi
-  - ${TRAVIS_BUILD_DIR}/scripts/travis_tests.sh
+  - |
+    if [[ "${TRAVIS_OS_NAME}" == "osx" ]] && [[ "${TRAVIS_BRANCH}" != "coverity_scan" ]]; then
+      make tests
+    fi
 
 after_success:
-  - ${TRAVIS_BUILD_DIR}/scripts/travis_coverage.sh
+  - |
+    if [[ "${COVERAGE}" == "Yes" ]] && [[ "${COVERITY_SCAN_BRANCH}" != "1" ]] && [[ "${TRAVIS_BRANCH}" != "coverity_scan" ]]; then
+      # Creating report
+      cd ${TRAVIS_BUILD_DIR}/build
+
+      make coverage -j 2
+
+      # Uploading report to CodeCov
+      bash <(curl -s https://codecov.io/bash) -f ${TRAVIS_BUILD_DIR}/build/filtered.info || echo "Codecov did not collect coverage reports"
+    fi
+    
 before_deploy:
 - openssl aes-256-cbc -K $encrypted_71e42633e801_key -iv $encrypted_71e42633e801_iv -in $TRAVIS_BUILD_DIR/scripts/deploy_rsa.enc -out /tmp/deploy_rsa -d
 - eval "$(ssh-agent -s)"
