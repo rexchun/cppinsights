@@ -78,7 +78,7 @@ matrix:
           description: "C++ Insights"
         notification_email: "andy@cppinsights.io"
         build_command_prepend: cmake -DINSIGHTS_LLVM_CONFIG=${LLVM_CONFIG} -DINSIGHTS_NO_LINKING=Yes  ..
-        build_command: make
+        build_command: make -j
         branch_pattern: coverity_scan    
     env: COMPILER='g++-7' COMPILER_CC='gcc-7' LLVM_CONFIG='/usr/bin/llvm-config-7' STATIC='No' COVERAGE='No' COVERITY_RUN=1 NO_LINKING=Yes
 
@@ -117,9 +117,10 @@ before_script:
 
 script:
   - |
-    if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then
+    if [ "${COVERITY_RUN}" != 1 ]; then
        make -j 2
     fi
+  - cat  /home/travis/build/andreasfertig/cppinsights/build/cov-int/build-log.txt
   - |
     if [[ "${TRAVIS_OS_NAME}" == "osx" ]] && [[ "${TRAVIS_BRANCH}" != "coverity_scan" ]]; then
       make tests
