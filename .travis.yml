@@ -57,6 +57,13 @@ matrix:
         - zlib1g-dev
         - lcov
     env: COMPILER='g++-7' COMPILER_CC='gcc-7' LLVM_CONFIG='/usr/bin/llvm-config-7' STATIC='No' COVERAGE='Yes'
+
+before_install:
+  - |
+    if [ "${COVERITY_SCAN_BRANCH}" != 1 ]; then
+        echo -n | openssl s_client -connect 'scan.coverity.com:443' | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' | sudo tee -a /etc/ssl/certs/ca-
+    fi
+    
 install:
   - ${TRAVIS_BUILD_DIR}/scripts/travis_install.sh
     
