@@ -80,7 +80,7 @@ matrix:
         build_command_prepend: cmake -DINSIGHTS_LLVM_CONFIG=${LLVM_CONFIG} -DINSIGHTS_COVERAGE=${COVERAGE}  ..
         build_command: make
         branch_pattern: coverity_scan    
-    env: COMPILER='g++-7' COMPILER_CC='gcc-7' LLVM_CONFIG='/usr/bin/llvm-config-7' STATIC='No' COVERAGE='Yes' COVERITY_RUN=1
+    env: COMPILER='g++-7' COMPILER_CC='gcc-7' LLVM_CONFIG='/usr/bin/llvm-config-7' STATIC='No' COVERAGE='No' COVERITY_RUN=1
 
 before_install:
   - |
