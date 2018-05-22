@@ -296,6 +296,7 @@ target_link_libraries(insights
 )
 
 if(INSIGHTS_NO_LINKING)
+    message(STATUS "Using fake linker")
     set(INSIGHTS_STRIP Off)
 
     if(APPLE)
